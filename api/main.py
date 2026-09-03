@@ -74,9 +74,18 @@ def home():
 
 @app.get("/health")
 def health():
+    model_name = None
+
+    if model is not None:
+        if hasattr(model, "named_steps") and "model" in model.named_steps:
+            model_name = type(model.named_steps["model"]).__name__
+        else:
+            model_name = type(model).__name__
+
     return {
         "status": "healthy",
         "model_loaded": model is not None,
+        "model_name": model_name,
     }
 
 
